@@ -1,5 +1,7 @@
 /* prompt.js — rédaction du cahier des charges (prompt) envoyé à Claude, du kit de démarrage et des prompts de correction. */
 const PORTAIL_PROF='https://vinztoc.github.io/Mes_Apps_EPS/',PORTAIL_ELEVES='https://vinztoc.github.io/Applis_EPS_Eleves/';
+/* Dépôt qui reçoit les propositions « Applis de la communauté » (tickets) et héberge communaute.json */
+const COMMU={owner:'VinzToc',repo:'Mes_Apps_EPS',fichier:PORTAIL_PROF+'communaute.json',label:'communaute-valide'};
 const PR={
  lab(list,v){const x=list.find(o=>o.v===v);return x?x.t.replace(/^\S+\s/,''):v},
  besoinLabels(p){const all=[...CAT.besoins.eleve,...CAT.besoins.prof];return(p.besoin.types||[]).map(v=>(all.find(b=>b.v===v)||{t:v}).t)},
@@ -55,7 +57,9 @@ ${PR.story(p,false)}
 ${b.objectif?`- Objectif d'apprentissage : ${b.objectif}\n`:''}- **Critère de réussite** : ${b.reussite||'—'}
   → L'appli est réussie si ce critère est atteint en séance réelle. Ne pas ajouter de fonction qui n'y contribue pas.
 
-## 2. Contexte d'utilisation
+${p.inspireDe&&p.inspireDe.url?`Appli de la communauté dont s'inspirer (sans la copier) : « ${p.inspireDe.nom} » — ${p.inspireDe.url}${p.inspireDe.auteur?` (créée par ${p.inspireDe.auteur})`:''}. Adapte-la au besoin décrit ici.
+
+`:''}## 2. Contexte d'utilisation
 - Utilisée par : ${PR.lab(CAT.cible,a.cible)||'—'}
 - Moments : ${(c.moments||[]).join(', ')||'—'}
 - Appareils : ${(c.appareils||[]).join(', ')||'—'}
@@ -84,7 +88,10 @@ ${autre?`- ⚠ L'appli sera hébergée sur ${url}, un domaine différent du port
 - Ergonomie terrain : mobile d'abord, boutons tactiles d'au moins 48 px, texte lisible en plein soleil, aucune saisie clavier quand un bouton suffit, confirmation avant toute suppression.
 - Charte graphique commune aux applis Mes Apps EPS : fond bleu nuit #0a1428, cartes semi-transparentes (effet verre), coins arrondis (16-20 px), accent en dégradé ${a.c1||'#ff8a1f'} → ${a.c2||'#2f9bff'}, police système, emoji ${a.emoji||''} dans l'en-tête.
 ${PR.a11y(p)?`- Accessibilité (élèves à besoins particuliers) :\n${PR.a11y(p)}`:''}
-- RGPD : aucune donnée envoyée sur Internet, ni cookie, ni statistiques, ni liste d'élèves dans le code. Pied de page : « Données stockées uniquement sur cet appareil ».
+- RGPD : aucune donnée envoyée sur Internet, ni cookie, ni statistiques, ni liste d'élèves dans le code. **Aucun champ de donnée de santé** (diagnostic, pathologie, motif médical) : seulement l'aménagement pédagogique.
+- Pied de page : « ${a.nom||'Appli'}${a.auteur?` · créée par ${a.auteur}`:''} · données stockées uniquement sur cet appareil » et un lien « Confidentialité » ouvrant une courte notice (fenêtre ou page \`confidentialite.html\`) : données enregistrées et finalité, stockage local sans serveur, effacement (bouton « Effacer les données de l'appli » avec confirmation), utilisation sous la responsabilité du chef d'établissement (responsable de traitement, registre, information des familles), hébergement GitHub Pages qui enregistre l'adresse IP des visiteurs.
+${/vid[ée]o|filme|caméra/i.test(fn.join(' ')+(a.fonctionsLibres||''))?`- Vidéo (droit à l'image) : utiliser la caméra de l'appareil (getUserMedia) en lecture différée ou en mémoire vive uniquement ; ne jamais enregistrer, téléverser ni conserver de vidéo après la fermeture de l'écran ; prévoir un bouton « Effacer » visible.
+`:''}
 - Interface entièrement en français, sans jargon technique.
 
 ## 7. Ce que j'attends de toi
@@ -112,7 +119,7 @@ ${txt||'(à préciser)'}
 `},
  fix(p,fails){return`# Corrections de l'appli ${p.app.nom||''} (${PR.url(p)})
 
-La Fabrique EPS a vérifié le dépôt et signale ces problèmes :
+La FabrikApplis EPS a vérifié le dépôt et signale ces problèmes :
 ${fails.map(f=>'- '+f).join('\n')}
 
 Je te joins le .zip des fichiers actuels. Corrige uniquement ces points (sans changer \`eps-core.js\`${p.app.cible==='eleve'?' ni `eleve-core.js`':''}), incrémente la version du cache dans \`sw.js\`, et rends-moi l'appli complète dans un seul .zip (fichiers à la racine).
@@ -128,7 +135,38 @@ eleves/
 .DS_Store
 Thumbs.db
 `,
- appsJson(p){const u=PR.url(p);return{id:p.app.id||'mon_app',nom:p.app.nom||'',desc:p.app.desc||'',url:u,icon:u+'icons/icon-192.png',emoji:p.app.emoji||'🧭',couleur:`${p.app.c1||'#ff8a1f'},${p.app.c2||'#2f9bff'}`,categorie:p.app.categorie||'Outils'}}
+ communaute(p){const j=PR.appsJson(p),b=p.besoin,s=p.partage||{};
+  return{...j,auteur:(p.app.auteur||'').trim(),cible:p.app.cible||'prof',discipline:p.ctx.discipline||'EPS',activite:p.ctx.activite||'',niveau:b.niveau||'',
+   besoin:{pour:b.pour||'',types:b.types||[],libelles:PR.besoinLabels(p),probleme:b.probleme||'',reussite:b.reussite||'',objectif:b.objectif||''},
+   etablissement:(s.etablissement||'').trim(),academie:(s.academie||'').trim(),
+   depot:p.gh&&p.gh.owner&&p.gh.repo?`https://github.com/${p.gh.owner}/${p.gh.repo}`:'',date:new Date().toISOString().slice(0,10)}},
+ ticket(p){const e=PR.communaute(p);return{title:`[Communauté] ${e.emoji} ${e.nom} — ${e.activite||e.discipline}`,
+  body:`## ${e.emoji} ${e.nom}
+${e.desc}
+
+**Adresse :** ${e.url}
+**Code source :** ${e.depot||'—'}
+**Pour :** ${e.cible==='eleve'?'les élèves (portail Applis EPS Élèves)':'le professeur (portail Mes Apps EPS)'} · ${e.discipline}${e.activite?' · '+e.activite:''}${e.niveau?' · '+e.niveau:''}
+**Proposée par :** ${e.auteur||'—'}${e.etablissement?' — '+e.etablissement:''}${e.academie?' (académie de '+e.academie+')':''}
+
+### Le besoin
+${PR.story(p,false)}
+
+${e.besoin.objectif?`**Objectif d'apprentissage :** ${e.besoin.objectif}
+
+`:''}### Engagements de l'auteur
+- [x] L'appli ne contient aucune donnée personnelle d'élève.
+- [x] J'accepte la publication de mon nom, de l'appli et du besoin dans « Applis de la communauté ».
+
+### Fiche (ne pas modifier)
+\`\`\`json
+${JSON.stringify(e,null,1)}
+\`\`\`
+
+---
+*Proposition envoyée depuis la FabrikApplis EPS. Pour valider : tester l'appli, puis ajouter l'étiquette \`${COMMU.label}\` à ce ticket (l'ajout dans communaute.json est automatique).*
+`}},
+ appsJson(p){const u=PR.url(p);return{id:p.app.id||'mon_app',nom:p.app.nom||'',desc:p.app.desc||'',url:u,icon:u+'icons/icon-192.png',emoji:p.app.emoji||'🧭',couleur:`${p.app.c1||'#ff8a1f'},${p.app.c2||'#2f9bff'}`,categorie:p.app.categorie||'Outils',...(p.app.auteur?{auteur:p.app.auteur.trim()}:{})}}
 };
 /* Icône générée à partir de l'emoji et des couleurs de l'appli */
 function makeIcon(p,size){return new Promise(ok=>{const c=document.createElement('canvas');c.width=c.height=size;const x=c.getContext('2d');
@@ -140,5 +178,5 @@ async function kitFiles(p,opt={}){const f=[];const get=async n=>new Uint8Array(a
  f.push({name:'eps-core.js',data:await get('eps-core.js')});
  if(p.app.cible==='eleve')f.push({name:'eleve-core.js',data:await get('eleve-core.js')});
  f.push({name:'icons/icon-192.png',data:await makeIcon(p,192)},{name:'icons/icon-512.png',data:await makeIcon(p,512)},{name:'.gitignore',data:PR.gitignore});
- if(!opt.publish)f.push({name:'CAHIER_DES_CHARGES.md',data:PR.build(p,p.voie)},{name:'LISEZMOI.txt',data:`Kit de démarrage « ${p.app.nom||'Mon appli'} » — Fabrique EPS\n\nJoignez ce .zip à votre conversation avec Claude, avec le prompt copié depuis la Fabrique.\n- eps-core.js${p.app.cible==='eleve'?' et eleve-core.js':''} : liaison avec Mes Apps EPS (ne pas modifier)\n- icons/ : icônes de l'appli\n- .gitignore : empêche de publier des données élèves\n- CAHIER_DES_CHARGES.md : le prompt complet\n`});
+ if(!opt.publish)f.push({name:'CAHIER_DES_CHARGES.md',data:PR.build(p,p.voie)},{name:'LISEZMOI.txt',data:`Kit de démarrage « ${p.app.nom||'Mon appli'} » — FabrikApplis EPS\n\nJoignez ce .zip à votre conversation avec Claude, avec le prompt copié depuis FabrikApplis.\n- eps-core.js${p.app.cible==='eleve'?' et eleve-core.js':''} : liaison avec Mes Apps EPS (ne pas modifier)\n- icons/ : icônes de l'appli\n- .gitignore : empêche de publier des données élèves\n- CAHIER_DES_CHARGES.md : le prompt complet\n`});
  return f}

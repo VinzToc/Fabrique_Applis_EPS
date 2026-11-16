@@ -121,3 +121,12 @@ details.guide summary{cursor:pointer;font-weight:800}details.guide[open] summary
 .mini{font-size:.8rem;color:var(--mut)}
 code{background:rgba(255,255,255,.1);padding:1px 6px;border-radius:6px;font-size:.85em}
 a{color:#8fcaff}
+
+.exg{margin-top:14px}.exg h3{margin:0 0 4px;font-size:.88rem;color:var(--c3)}
+.pi .tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}.pi .tags i{font-style:normal;font-size:.72rem;padding:2px 8px;border-radius:9px;background:rgba(255,255,255,.1)}
+.pi .acts{display:flex;flex-direction:column;gap:6px}.pi .acts .btn{padding:7px 12px;font-size:.8rem;white-space:nowrap}
+.pi .bes{font-size:.84rem;margin-top:4px;color:var(--tx);opacity:.9}
+#tC .row select,#tC .row input{flex:1;min-width:140px}
+@media(max-width:560px){.pi{flex-wrap:wrap}.pi .acts{flex-direction:row;width:100%}}
+
+header img{border-radius:20px;padding:0;background:none;object-fit:cover}

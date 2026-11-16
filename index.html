@@ -1,20 +1,20 @@
 <!DOCTYPE html><html lang="fr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Fabrique EPS</title><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#0a1428">
+<title>FabrikApplis EPS</title><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#0a1428">
 <link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/icon-192.png">
 <link rel="stylesheet" href="style.css">
 </head><body>
-<header><img src="icons/icon-192.png" alt="Logo Fabrique EPS"><div><h1>Fabrique EPS</h1><p>Du besoin à l'appli en ligne, avec Claude</p></div></header>
+<header><img src="icons/icon-192.png" alt="Logo FabrikApplis EPS"><div><h1>FabrikApplis EPS</h1><p>Du besoin à l'appli en ligne, avec Claude</p></div></header>
 <main>
 
 <!-- ───────── PROJETS ───────── -->
 <section id="tP" class="tab act">
  <div class="card"><h2>🛠️ Créer son propre outil</h2>
-  <p style="margin:0">La Fabrique vous accompagne en 5 étapes : <b>partir d'un besoin réel</b> (de vos élèves ou le vôtre), concevoir l'outil, le faire coder par Claude, le publier gratuitement sur GitHub Pages, puis le brancher sur Mes Apps EPS.</p>
+  <p style="margin:0">FabrikApplis vous accompagne en 5 étapes : <b>partir d'un besoin réel</b> (de vos élèves ou le vôtre), concevoir l'outil, le faire coder par Claude, le publier gratuitement sur GitHub Pages, puis le brancher sur Mes Apps EPS.</p>
   <div class="row"><button class="btn" id="newP">➕ Nouveau projet</button><label class="btn r" style="margin:0">📂 Ouvrir un projet (.json)<input type="file" id="impP" accept=".json,application/json" hidden></label></div>
  </div>
  <div class="card"><h2>📁 Mes projets</h2><div id="plist" class="plist"></div></div>
- <div class="card"><h2>🧩 Exemples pour démarrer</h2><p class="mini" style="margin:0 0 6px">Un clic crée un projet pré-rempli que vous adaptez ensuite.</p><div class="chips" id="exs"></div></div>
+ <div class="card"><h2>🧩 Exemples pour démarrer</h2><p class="mini" style="margin:0 0 6px">Des problèmes d'apprentissage d'élèves, dans différentes APSA. Un clic crée un projet pré-rempli que vous adaptez à votre classe.</p><div id="exs"></div></div>
 </section>
 
 <!-- ───────── ATELIER ───────── -->
@@ -65,6 +65,7 @@
    <div class="g2">
     <label>Nom<input data-k="app.nom" placeholder="AllureRun"></label>
     <label>Identifiant (sans espace)<input data-k="app.id" placeholder="allurerun"></label>
+    <label>Auteur (affiché sur la tuile du portail)<input data-k="app.auteur" placeholder="Prénom NOM"></label>
     <label>Emoji<input data-k="app.emoji" placeholder="🏃" maxlength="4"></label>
     <label>Catégorie dans le portail<select data-k="app.categorie" id="sCat"></select></label>
     <label>Couleur 1<input type="color" data-k="app.c1" style="height:44px;width:100%"></label>
@@ -81,6 +82,7 @@
    <div class="q">Comment travaillez-vous avec Claude ?</div><div class="chips" data-single="voie" id="cVoie"></div>
    <ol class="howto" id="howto"></ol>
    <div class="row"><button class="btn" id="kit">⬇ 1. Kit de démarrage (.zip)</button><button class="btn b" id="cpy">📋 2. Copier le prompt</button><a class="btn r" id="openC" href="https://claude.ai/new" target="_blank" rel="noopener">↗ 3. Ouvrir Claude</a><button class="btn r" id="dlMd">⬇ Prompt (.md)</button></div>
+   <div class="warn">🔒 Le prompt décrit un <b>besoin pédagogique</b> : n'y ajoutez jamais de nom d'élève, de résultat ou de fichier de classe, et ne joignez à Claude aucune liste d'élèves.</div>
    <pre class="prompt" id="prompt"></pre>
    <details class="guide"><summary>🔁 Faire évoluer ou corriger une appli existante</summary>
     <p class="mini">Décrivez ce qui doit changer (bug constaté, retour des élèves, nouvelle fonction). Joignez à Claude le .zip des fichiers actuels (bouton à l'étape 4 ou 5).</p>
@@ -99,9 +101,9 @@
      <li>Choisissez bien votre <b>nom d'utilisateur</b> : il apparaîtra dans l'adresse de vos applis, par exemple <code>https://<b>votre-nom</b>.github.io/MonAppli/</code>.</li>
      <li>Validez votre adresse e-mail, puis revenez ici.</li>
     </ol></details>
-   <details class="guide" id="gTok" open><summary>② Autoriser la Fabrique à publier pour vous (une seule fois)</summary>
+   <details class="guide" id="gTok" open><summary>② Autoriser FabrikApplis à publier pour vous (une seule fois)</summary>
     <ol class="howto">
-     <li>Ouvrez la page de création de jeton : <a href="https://github.com/settings/tokens/new?scopes=public_repo&amp;description=Fabrique%20EPS" target="_blank" rel="noopener">créer le jeton « Fabrique EPS »</a> (la case <code>public_repo</code> est déjà cochée).</li>
+     <li>Ouvrez la page de création de jeton : <a href="https://github.com/settings/tokens/new?scopes=public_repo&amp;description=FabrikApplis%20EPS" target="_blank" rel="noopener">créer le jeton « FabrikApplis EPS »</a> (la case <code>public_repo</code> est déjà cochée).</li>
      <li>Choisissez une durée (<i>Expiration</i>), par exemple 90 jours, puis cliquez sur <b>Generate token</b> en bas de page.</li>
      <li>Copiez le jeton (il commence par <code>ghp_</code>) et collez-le ci-dessous.</li>
     </ol>
@@ -132,17 +134,35 @@
   <!-- 5 VERIFIER -->
   <div class="step" id="s5">
    <h2>✅ Vérifier et brancher sur le portail</h2>
-   <p class="mini" style="margin:0">La Fabrique contrôle le dépôt publié : présence des fichiers, appels à eps-core.js, mode hors ligne, échanges .xlsx, absence de données élèves.</p>
+   <p class="mini" style="margin:0">FabrikApplis contrôle le dépôt publié : présence des fichiers, appels à eps-core.js, mode hors ligne, échanges .xlsx, absence de données élèves.</p>
    <div class="row"><button class="btn b" id="chk">🔍 Lancer la vérification</button></div>
    <ul class="chk" id="chkL"></ul>
    <div id="fix"></div>
    <div class="q">🧪 Tester avec le besoin de départ</div><div class="story" id="testB"></div>
+   <div class="warn">⚖️ <b>Avant l'usage avec vos élèves</b> : informez votre chef d'établissement (responsable de traitement) pour que l'appli soit inscrite au registre des traitements, et informez les élèves et leurs familles. Un modèle de mention figure dans la <a href="https://vinztoc.github.io/Mes_Apps_EPS/confidentialite.html#s14" target="_blank" rel="noopener">politique de confidentialité de Mes Apps EPS</a>.</div>
    <div class="q">🔗 Intégration au portail</div>
    <p class="mini" id="portailTxt" style="margin:4px 0"></p>
    <pre class="prompt" id="appsJson"></pre>
    <div class="row"><button class="btn b" id="cpyJson">📋 Copier la ligne apps.json</button><button class="btn r" id="cpyMail">✉️ Copier une demande d'ajout</button></div>
+   <div class="q">🌍 Partager avec la communauté</div>
+   <p class="mini" style="margin:4px 0">Votre appli et surtout <b>le besoin qui l'a fait naître</b> peuvent aider d'autres collègues. La proposition est relue par le responsable du portail avant d'apparaître dans « Applis de la communauté ».</p>
+   <div class="g2"><label>Votre nom (ou pseudo)<input data-k="app.auteur" placeholder="Prénom NOM"></label><label>Établissement (facultatif)<input data-k="partage.etablissement" placeholder="Lycée …, Ville"></label></div>
+   <label>Académie (facultatif)<input data-k="partage.academie" style="width:100%" placeholder="Nantes"></label>
+   <label style="display:flex;gap:8px;align-items:flex-start;color:var(--tx)"><input type="checkbox" data-k="partage.ok1" style="width:auto;margin-top:3px"> Je certifie que l'appli publiée ne contient aucune donnée personnelle d'élève (noms, photos, vidéos, résultats).</label>
+   <label style="display:flex;gap:8px;align-items:flex-start;color:var(--tx)"><input type="checkbox" data-k="partage.ok2" style="width:auto;margin-top:3px"> J'accepte que mon nom, l'appli et la description du besoin soient visibles dans le portail et que d'autres collègues s'en inspirent.</label>
+   <div class="row"><button class="btn" id="share">📨 Proposer à la communauté</button><button class="btn r" id="shareCp">📋 Copier la proposition</button></div>
+   <div id="shareMsg"></div>
    <div class="nextp"><button class="btn r" data-go="4">⬅ GitHub</button><button class="btn" id="expP">💾 Sauvegarder le projet (.json)</button></div>
   </div>
+ </div>
+</section>
+
+<!-- ───────── COMMUNAUTÉ ───────── -->
+<section id="tC" class="tab">
+ <div class="card"><h2>🌍 Applis de la communauté</h2>
+  <p style="margin:0">Des outils créés par des collègues avec FabrikApplis, chacun né d'un besoin réel. Ouvrez-les, ou <b>inspirez-vous de leur besoin</b> pour créer votre propre version.</p>
+  <div class="row"><select id="cfA"><option value="">Toutes les APSA</option></select><select id="cfT"><option value="">Tous les besoins</option></select><select id="cfC"><option value="">Prof et élèves</option><option value="prof">🧑‍🏫 Applis prof</option><option value="eleve">🎒 Applis élèves</option></select><input id="cfQ" placeholder="🔍 Rechercher…"></div>
+  <p class="mini" id="cCnt"></p><div class="plist" id="clist"></div>
  </div>
 </section>
 
@@ -152,21 +172,25 @@
   <ol class="howto">
    <li><b>Besoin</b> : on part d'un problème réel, celui des élèves ou de l'enseignant, et d'un critère de réussite observable.</li>
    <li><b>Conception</b> : on choisit qui utilise l'appli, quand, sur quel appareil, avec quelles données.</li>
-   <li><b>Claude</b> : la Fabrique rédige un cahier des charges complet (prompt) et prépare un kit de démarrage. Claude code l'appli et vous rend un .zip.</li>
-   <li><b>GitHub</b> : la Fabrique crée le dépôt, y dépose les fichiers et active GitHub Pages. L'appli a son adresse web et s'installe comme une appli.</li>
+   <li><b>Claude</b> : FabrikApplis rédige un cahier des charges complet (prompt) et prépare un kit de démarrage. Claude code l'appli et vous rend un .zip.</li>
+   <li><b>GitHub</b> : FabrikApplis crée le dépôt, y dépose les fichiers et active GitHub Pages. L'appli a son adresse web et s'installe comme une appli.</li>
    <li><b>Vérifier</b> : contrôle automatique, test avec le critère de réussite, puis intégration au portail Mes Apps EPS ou Applis EPS Élèves.</li>
   </ol></div>
  <div class="card"><h2>🔒 Données élèves et RGPD</h2>
-  <p>Les applis créées stockent les données <b>uniquement sur l'appareil</b> (base locale du navigateur), comme Mes Apps EPS. GitHub n'héberge que le <b>code</b>, jamais de liste d'élèves : la Fabrique bloque les fichiers de données et ajoute un <code>.gitignore</code> protecteur.</p>
+  <p>Les applis créées stockent les données <b>uniquement sur l'appareil</b> (base locale du navigateur), comme Mes Apps EPS. GitHub n'héberge que le <b>code</b>, jamais de liste d'élèves : FabrikApplis bloque les fichiers de données et ajoute un <code>.gitignore</code> protecteur.</p>
+  <p>Ce fonctionnement local ne suffit pas à lui seul : utilisée avec des élèves, une appli est un traitement de données réalisé pour l'établissement. Le <b>chef d'établissement</b> (responsable de traitement) doit en être informé pour l'inscrire au <b>registre des traitements</b>, et les élèves et leurs familles doivent être <b>informés</b>. Aucune donnée de santé (diagnostic, contenu de certificat) ne doit être saisie : seulement l'aménagement pédagogique.</p>
+  <p>Le prompt envoyé à Claude ne doit contenir <b>aucune donnée d'élève</b>. GitHub Pages enregistre l'adresse IP des appareils qui ouvrent une appli (sécurité) ; c'est mentionné dans la notice de confidentialité que chaque appli doit afficher.</p>
   <p>Une appli publiée sur un autre compte GitHub (autre adresse <code>xxx.github.io</code>) ne partage pas la base locale du portail : elle échange alors les données par <b>fichier .xlsx</b> (import de la liste, export des saisies), ce que le cahier des charges impose toujours.</p></div>
+ <div class="card"><h2>🌍 Partager une appli</h2>
+  <p>À l'étape 5, « Proposer à la communauté » ouvre un ticket sur le dépôt du portail avec la fiche de l'appli et son besoin. Le responsable du portail la relit puis la valide : elle apparaît alors dans « Applis de la communauté », dans Mes Apps EPS et dans l'onglet 🌍 de FabrikApplis.</p></div>
  <div class="card"><h2>🧑‍💻 Voie avancée : Claude Code</h2>
-  <p>Si vous utilisez Claude Code relié à votre compte GitHub, choisissez cette voie à l'étape 3 : Claude crée lui-même le dépôt, y écrit les fichiers et active GitHub Pages. Les étapes 4 et 5 de la Fabrique servent alors à vérifier le résultat.</p></div>
+  <p>Si vous utilisez Claude Code relié à votre compte GitHub, choisissez cette voie à l'étape 3 : Claude crée lui-même le dépôt, y écrit les fichiers et active GitHub Pages. Les étapes 4 et 5 de FabrikApplis servent alors à vérifier le résultat.</p></div>
 </section>
 </main>
 <div id="toast" role="status" aria-live="polite"></div>
 <div id="qrm" class="ov" hidden><div class="fc qc"><button id="qx" aria-label="Fermer" class="xb">✕</button><h2 style="margin:0 0 8px">▦ Votre appli</h2><div id="qrc" class="qrbox"></div><p id="qru" class="qru"></p></div></div>
-<p class="ver">Fabrique EPS · version <span id="ver"></span> · aucune donnée d'élève n'est traitée ni publiée</p>
-<nav><button class="act" data-t="tP">📁 Projets</button><button data-t="tA">🛠️ Atelier</button><button data-t="tG">📘 Guide</button></nav>
+<p class="ver">FabrikApplis EPS · version <span id="ver"></span> · aucune donnée d'élève n'est traitée ni publiée</p>
+<nav><button class="act" data-t="tP">📁 Projets</button><button data-t="tA">🛠️ Atelier</button><button data-t="tC">🌍 Communauté</button><button data-t="tG">📘 Guide</button></nav>
 <script src="version.js"></script>
 <script src="eps-core.js"></script>
 <script src="qrcode.js"></script>

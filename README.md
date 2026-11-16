@@ -1,4 +1,4 @@
-# Fabrique EPS
+# FabrikApplis EPS
 
 PWA du portail **Mes Apps EPS** qui aide un enseignant à créer son propre outil numérique avec Claude, en partant d'un **besoin réel** (élève ou enseignant), puis à le publier sur GitHub Pages.
 
@@ -10,16 +10,26 @@ PWA du portail **Mes Apps EPS** qui aide un enseignant à créer son propre outi
 5. **Vérifier** : contrôle du dépôt (index, manifest, service worker, eps-core.js, appels d'enregistrement et d'export, icônes, absence de données, ressources externes, Pages), prompt de correction, ligne `apps.json` pour le portail.
 
 ## Déploiement
-Créer le dépôt `Fabrique_EPS`, y déposer le contenu de ce dossier, puis Settings → Pages → Branch `main` / root.
-URL : https://vinztoc.github.io/Fabrique_EPS/
+Dépôt `Fabrique_Applis_EPS`, y déposer le contenu de ce dossier, puis Settings → Pages → Branch `main` / root.
+URL : https://vinztoc.github.io/Fabrique_Applis_EPS/
 
 Ligne à ajouter dans `apps.json` de Mes_Apps_EPS (icône à copier dans `icons/` du portail) :
 ```json
-{"id":"fabrique","nom":"Fabrique EPS","desc":"Créer son propre outil à partir d'un besoin, le faire coder par Claude et le publier sur GitHub Pages","url":"https://vinztoc.github.io/Fabrique_EPS/","icon":"icons/icon-192-Fabrique.png","emoji":"🛠️","couleur":"#ff8a1f,#2f9bff","categorie":"Gestion"},
+{"id":"fabriqueappliseps","nom":"FabrikApplis EPS","desc":"Aider à concevoir et publier une appli pédagogique pour l'EPS","url":"https://vinztoc.github.io/Fabrique_Applis_EPS/","icon":"icons/icon-192-Fabrique.png","emoji":"🧭","couleur":"#b030ff,#6a0fd0","categorie":"Gestion","auteur":"Vincent TOCQUIN"},
 ```
+
+## Applis de la communauté
+- Onglet 🌍 : catalogue `communaute.json` du portail (filtres APSA / besoin / prof-élèves), « S'en inspirer » crée un projet à partir du besoin d'une appli existante (aussi via `?inspire=<id>` depuis le portail).
+- Étape 5 « Proposer à la communauté » : crée un ticket sur `VinzToc/Mes_Apps_EPS` (fiche JSON + besoin). Validation par l'étiquette `communaute-valide` (voir `.github/workflows/communaute.yml` du portail). Dépôt cible réglable dans `prompt.js` (`COMMU`).
+
+## Exemples
+15 exemples en 5 thèmes : individualiser (natation, escalade, musculation), adapter/reformuler (gymnastique, basket, danse), accompagner (saut en longueur, tennis de table, course d'orientation), analyser sa pratique (volley-ball, handball, vitesse), organiser/suivre.
 
 ## Personnaliser
 Les besoins types, fonctionnalités suggérées, activités et exemples sont dans `catalogue.js`. Le texte du cahier des charges est dans `prompt.js`.
 
 ## Données
 Aucune donnée d'élève n'est traitée. Les projets sont enregistrés dans le navigateur (localStorage) et exportables en .json. Le jeton GitHub reste dans le navigateur et n'est envoyé qu'à api.github.com.
+
+## Auteur
+Chaque appli porte le nom de son auteur (étape 2, mémorisé pour les projets suivants) : il apparaît sous la description de la tuile dans le portail (champ `auteur` de apps.json / communaute.json) et dans le pied de page de l'appli générée.
