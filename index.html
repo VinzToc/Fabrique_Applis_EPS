@@ -1,0 +1,178 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Fabrique EPS</title><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#0a1428">
+<link rel="icon" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="style.css">
+</head><body>
+<header><img src="icons/icon-192.png" alt="Logo Fabrique EPS"><div><h1>Fabrique EPS</h1><p>Du besoin à l'appli en ligne, avec Claude</p></div></header>
+<main>
+
+<!-- ───────── PROJETS ───────── -->
+<section id="tP" class="tab act">
+ <div class="card"><h2>🛠️ Créer son propre outil</h2>
+  <p style="margin:0">La Fabrique vous accompagne en 5 étapes : <b>partir d'un besoin réel</b> (de vos élèves ou le vôtre), concevoir l'outil, le faire coder par Claude, le publier gratuitement sur GitHub Pages, puis le brancher sur Mes Apps EPS.</p>
+  <div class="row"><button class="btn" id="newP">➕ Nouveau projet</button><label class="btn r" style="margin:0">📂 Ouvrir un projet (.json)<input type="file" id="impP" accept=".json,application/json" hidden></label></div>
+ </div>
+ <div class="card"><h2>📁 Mes projets</h2><div id="plist" class="plist"></div></div>
+ <div class="card"><h2>🧩 Exemples pour démarrer</h2><p class="mini" style="margin:0 0 6px">Un clic crée un projet pré-rempli que vous adaptez ensuite.</p><div class="chips" id="exs"></div></div>
+</section>
+
+<!-- ───────── ATELIER ───────── -->
+<section id="tA" class="tab">
+ <div class="card">
+  <div class="steps" id="steps">
+   <button data-s="1"><b>🎯</b>1 · Besoin</button><button data-s="2"><b>📐</b>2 · Conception</button><button data-s="3"><b>🤖</b>3 · Claude</button><button data-s="4"><b>🚀</b>4 · GitHub</button><button data-s="5"><b>✅</b>5 · Vérifier</button>
+  </div>
+
+  <!-- 1 BESOIN -->
+  <div class="step" id="s1">
+   <h2>🎯 Partir du besoin</h2>
+   <p class="mini" style="margin:0">Une bonne appli répond à un problème concret rencontré en séance. Décrivez-le avant de penser aux fonctionnalités.</p>
+   <div class="q"><span class="n">1</span>Pour qui est le besoin ?</div><div class="chips" data-single="besoin.pour" id="cPour"></div>
+   <div class="q"><span class="n">2</span>Quel est le besoin ?<small>Plusieurs choix possibles. La liste s'adapte à votre réponse précédente.</small></div><div class="chips" data-multi="besoin.types" id="cTypes"></div>
+   <div class="q"><span class="n">3</span>Décrivez la situation problème<small>Que se passe-t-il en séance ? Qui est en difficulté, à quel moment ?</small></div>
+   <textarea data-k="besoin.probleme" placeholder="Ex. : pendant le demi-fond, les élèves ne savent pas s'ils courent à la bonne allure ; je ne peux pas chronométrer 30 élèves et leur donner un retour à chaque tour."></textarea>
+   <div class="q"><span class="n">4</span>Les élèves concernés</div>
+   <div class="g2"><label>Niveau<select data-k="besoin.niveau" id="sNiv"></select></label><label>Effectif habituel<input data-k="besoin.effectif" type="number" min="1" max="60" placeholder="30"></label></div>
+   <div class="q" style="margin-top:6px">Élèves à besoins particuliers à prendre en compte<small>L'application sera pensée pour eux dès le départ (accessibilité).</small></div><div class="chips" data-multi="besoin.public" id="cPublic"></div>
+   <div class="q"><span class="n">5</span>Comment faites-vous aujourd'hui ? Qu'est-ce qui coince ?</div>
+   <textarea data-k="besoin.actuel" placeholder="Ex. : fiche papier + chrono ; les feuilles se mouillent, je ressaisis tout le soir…"></textarea>
+   <div class="q"><span class="n">6</span>À quoi verrez-vous que l'appli répond au besoin ?<small>Le critère de réussite : il guidera Claude et vous servira à tester.</small></div>
+   <textarea data-k="besoin.reussite" placeholder="Ex. : à la fin de la séance, chaque élève connaît son allure réelle et l'écart à son projet, sans calcul de ma part."></textarea>
+   <div class="q"><span class="n">7</span>Objectif d'apprentissage visé <small>Facultatif : AFL, attendu de fin de cycle, compétence…</small></div>
+   <input data-k="besoin.objectif" style="width:100%" placeholder="Ex. : AFL1 – S'engager pour produire une performance maximale (gestion de l'effort)">
+   <div class="q">📝 Votre besoin reformulé</div><div class="story" id="story"></div>
+   <div class="nextp"><span></span><button class="btn b" data-go="2">Concevoir l'appli ➜</button></div>
+  </div>
+
+  <!-- 2 CONCEPTION -->
+  <div class="step" id="s2">
+   <h2>📐 Concevoir l'outil</h2>
+   <div class="g2"><label>Discipline<input data-k="ctx.discipline" placeholder="EPS"></label><label>Activité (APSA) ou thème<input data-k="ctx.activite" list="dlAct" placeholder="Demi-fond, Badminton, Acrosport…"></label></div>
+   <datalist id="dlAct"></datalist>
+   <div class="q">Qui manipule l'appli ?<small>Cela détermine le portail d'intégration et la façon d'identifier les élèves.</small></div><div class="chips" data-single="app.cible" id="cCible"></div>
+   <div class="q">À quel moment ?</div><div class="chips" data-multi="ctx.moments" id="cMom"></div>
+   <div class="q">Sur quel appareil ?</div><div class="chips" data-multi="ctx.appareils" id="cApp"></div>
+   <label style="display:flex;gap:8px;align-items:center;margin-top:14px;color:var(--tx)"><input type="checkbox" data-k="ctx.horsLigne" style="width:auto"> Doit fonctionner sans connexion Internet (gymnase, stade…)</label>
+   <div class="q">Fonctionnalités<small>Suggestions tirées de votre besoin : gardez celles qui servent vraiment. Moins, c'est mieux pour une première version.</small></div>
+   <div class="chips" data-multi="app.fonctions" id="cFn"></div>
+   <label>Autres fonctionnalités ou précisions<textarea data-k="app.fonctionsLibres" placeholder="Ex. : un bip sonore toutes les 30 s ; grand affichage lisible à 5 m…"></textarea></label>
+   <label>Déroulé d'utilisation en séance <span class="mini">(facultatif, très utile à Claude)</span><textarea data-k="app.deroule" placeholder="1. J'ouvre l'appli et je choisis la classe&#10;2. Chaque élève saisit son temps de passage…&#10;3. En fin de séance, j'exporte vers Mes Apps EPS"></textarea></label>
+   <div class="q">Données à enregistrer par élève</div>
+   <select data-k="app.donnees.mode" id="sMode" style="width:100%"></select>
+   <div id="flds"></div><div class="row" id="fldAdd"><button class="btn r" id="addF">➕ Ajouter un champ</button></div>
+   <div class="q">Identité de l'appli</div>
+   <div class="g2">
+    <label>Nom<input data-k="app.nom" placeholder="AllureRun"></label>
+    <label>Identifiant (sans espace)<input data-k="app.id" placeholder="allurerun"></label>
+    <label>Emoji<input data-k="app.emoji" placeholder="🏃" maxlength="4"></label>
+    <label>Catégorie dans le portail<select data-k="app.categorie" id="sCat"></select></label>
+    <label>Couleur 1<input type="color" data-k="app.c1" style="height:44px;width:100%"></label>
+    <label>Couleur 2<input type="color" data-k="app.c2" style="height:44px;width:100%"></label>
+   </div>
+   <label>Description courte (une phrase)<input data-k="app.desc" style="width:100%" placeholder="Allure de course en direct et bilan par élève, avec enregistrement dans Mes Apps EPS"></label>
+   <div class="nextp"><button class="btn r" data-go="1">⬅ Besoin</button><button class="btn b" data-go="3">Générer avec Claude ➜</button></div>
+  </div>
+
+  <!-- 3 CLAUDE -->
+  <div class="step" id="s3">
+   <h2>🤖 Faire coder l'appli par Claude</h2>
+   <div id="manque"></div>
+   <div class="q">Comment travaillez-vous avec Claude ?</div><div class="chips" data-single="voie" id="cVoie"></div>
+   <ol class="howto" id="howto"></ol>
+   <div class="row"><button class="btn" id="kit">⬇ 1. Kit de démarrage (.zip)</button><button class="btn b" id="cpy">📋 2. Copier le prompt</button><a class="btn r" id="openC" href="https://claude.ai/new" target="_blank" rel="noopener">↗ 3. Ouvrir Claude</a><button class="btn r" id="dlMd">⬇ Prompt (.md)</button></div>
+   <pre class="prompt" id="prompt"></pre>
+   <details class="guide"><summary>🔁 Faire évoluer ou corriger une appli existante</summary>
+    <p class="mini">Décrivez ce qui doit changer (bug constaté, retour des élèves, nouvelle fonction). Joignez à Claude le .zip des fichiers actuels (bouton à l'étape 4 ou 5).</p>
+    <textarea id="evo" placeholder="Ex. : sur iPhone, le bouton Enregistrer est caché par la barre du bas ; ajouter un mode « grand écran » pour vidéoprojecteur."></textarea>
+    <div class="row"><button class="btn b" id="cpyEvo">📋 Copier le prompt d'évolution</button></div>
+   </details>
+   <div class="nextp"><button class="btn r" data-go="2">⬅ Conception</button><button class="btn b" data-go="4">Publier sur GitHub ➜</button></div>
+  </div>
+
+  <!-- 4 GITHUB -->
+  <div class="step" id="s4">
+   <h2>🚀 Publier sur GitHub Pages</h2>
+   <details class="guide" id="gAcc"><summary>① Je n'ai pas encore de compte GitHub</summary>
+    <ol class="howto">
+     <li>Allez sur <a href="https://github.com/signup" target="_blank" rel="noopener">github.com/signup</a> et créez un compte gratuit (adresse professionnelle conseillée).</li>
+     <li>Choisissez bien votre <b>nom d'utilisateur</b> : il apparaîtra dans l'adresse de vos applis, par exemple <code>https://<b>votre-nom</b>.github.io/MonAppli/</code>.</li>
+     <li>Validez votre adresse e-mail, puis revenez ici.</li>
+    </ol></details>
+   <details class="guide" id="gTok" open><summary>② Autoriser la Fabrique à publier pour vous (une seule fois)</summary>
+    <ol class="howto">
+     <li>Ouvrez la page de création de jeton : <a href="https://github.com/settings/tokens/new?scopes=public_repo&amp;description=Fabrique%20EPS" target="_blank" rel="noopener">créer le jeton « Fabrique EPS »</a> (la case <code>public_repo</code> est déjà cochée).</li>
+     <li>Choisissez une durée (<i>Expiration</i>), par exemple 90 jours, puis cliquez sur <b>Generate token</b> en bas de page.</li>
+     <li>Copiez le jeton (il commence par <code>ghp_</code>) et collez-le ci-dessous.</li>
+    </ol>
+    <label>Jeton GitHub<input id="tok" type="password" autocomplete="off" placeholder="ghp_…" style="width:100%"></label>
+    <label style="display:flex;gap:8px;align-items:center;color:var(--tx)"><input type="checkbox" id="tokMem" style="width:auto"> Mémoriser sur cet appareil (sinon, oublié à la fermeture)</label>
+    <div class="row"><button class="btn b" id="tokGo">🔑 Connecter</button><button class="btn r" id="tokOut" hidden>Se déconnecter</button><span id="who"></span></div>
+    <p class="rgpd">🔒 Le jeton reste dans ce navigateur et n'est envoyé qu'à GitHub. Il permet seulement de gérer vos dépôts <b>publics</b>. Vous pouvez le supprimer à tout moment dans GitHub (Settings → Developer settings → Tokens).</p>
+   </details>
+   <div id="ghZone" hidden>
+    <div class="q">③ Le dépôt de l'appli</div>
+    <div class="chips" data-single="gh.mode" id="cRepoMode"></div>
+    <div id="repoNew"><label>Nom du dépôt<input id="repoName" style="width:100%" placeholder="AllureRun_EPS"></label><p class="mini" id="repoUrl"></p></div>
+    <div id="repoOld" hidden><label>Dépôt existant<select id="repoSel" style="width:100%"></select></label></div>
+    <div class="q">④ Les fichiers de l'appli</div>
+    <label class="drop" id="drop"><span>Glissez ici le <b>.zip</b> téléchargé depuis Claude, ou les fichiers de l'appli</span><span class="btn b">📂 Choisir</span><input id="files" type="file" multiple hidden></label>
+    <ul class="files" id="flist" hidden></ul>
+    <div class="warn">🛡️ <b>Données élèves :</b> votre dépôt est <b>public</b>. Les fichiers .csv, .xlsx, .xls, .ods et .json de listes sont bloqués automatiquement. Seul le code de l'appli est publié ; les données restent sur les appareils.</div>
+    <label style="display:flex;gap:8px;align-items:center;color:var(--tx);margin-top:12px"><input type="checkbox" id="autoAdd" checked style="width:auto"> Compléter automatiquement les fichiers manquants (eps-core.js, icônes, .gitignore)</label>
+    <label style="display:flex;gap:8px;align-items:center;color:var(--tx)"><input type="checkbox" id="wipe" style="width:auto"> Remplacer tout le contenu du dépôt (supprime les fichiers absents du .zip)</label>
+    <label>Message de version<input id="cmsg" style="width:100%" placeholder="Première version"></label>
+    <div class="row"><button class="btn" id="pub" disabled>🚀 Publier l'appli</button><button class="btn r" id="dlRepo" hidden>⬇ Fichiers actuels du dépôt (.zip)</button></div>
+    <div class="log" id="log" hidden></div>
+    <div id="pubOk"></div>
+   </div>
+   <div class="nextp"><button class="btn r" data-go="3">⬅ Claude</button><button class="btn b" data-go="5">Vérifier et intégrer ➜</button></div>
+  </div>
+
+  <!-- 5 VERIFIER -->
+  <div class="step" id="s5">
+   <h2>✅ Vérifier et brancher sur le portail</h2>
+   <p class="mini" style="margin:0">La Fabrique contrôle le dépôt publié : présence des fichiers, appels à eps-core.js, mode hors ligne, échanges .xlsx, absence de données élèves.</p>
+   <div class="row"><button class="btn b" id="chk">🔍 Lancer la vérification</button></div>
+   <ul class="chk" id="chkL"></ul>
+   <div id="fix"></div>
+   <div class="q">🧪 Tester avec le besoin de départ</div><div class="story" id="testB"></div>
+   <div class="q">🔗 Intégration au portail</div>
+   <p class="mini" id="portailTxt" style="margin:4px 0"></p>
+   <pre class="prompt" id="appsJson"></pre>
+   <div class="row"><button class="btn b" id="cpyJson">📋 Copier la ligne apps.json</button><button class="btn r" id="cpyMail">✉️ Copier une demande d'ajout</button></div>
+   <div class="nextp"><button class="btn r" data-go="4">⬅ GitHub</button><button class="btn" id="expP">💾 Sauvegarder le projet (.json)</button></div>
+  </div>
+ </div>
+</section>
+
+<!-- ───────── GUIDE ───────── -->
+<section id="tG" class="tab">
+ <div class="card"><h2>📘 Comment ça marche ?</h2>
+  <ol class="howto">
+   <li><b>Besoin</b> : on part d'un problème réel, celui des élèves ou de l'enseignant, et d'un critère de réussite observable.</li>
+   <li><b>Conception</b> : on choisit qui utilise l'appli, quand, sur quel appareil, avec quelles données.</li>
+   <li><b>Claude</b> : la Fabrique rédige un cahier des charges complet (prompt) et prépare un kit de démarrage. Claude code l'appli et vous rend un .zip.</li>
+   <li><b>GitHub</b> : la Fabrique crée le dépôt, y dépose les fichiers et active GitHub Pages. L'appli a son adresse web et s'installe comme une appli.</li>
+   <li><b>Vérifier</b> : contrôle automatique, test avec le critère de réussite, puis intégration au portail Mes Apps EPS ou Applis EPS Élèves.</li>
+  </ol></div>
+ <div class="card"><h2>🔒 Données élèves et RGPD</h2>
+  <p>Les applis créées stockent les données <b>uniquement sur l'appareil</b> (base locale du navigateur), comme Mes Apps EPS. GitHub n'héberge que le <b>code</b>, jamais de liste d'élèves : la Fabrique bloque les fichiers de données et ajoute un <code>.gitignore</code> protecteur.</p>
+  <p>Une appli publiée sur un autre compte GitHub (autre adresse <code>xxx.github.io</code>) ne partage pas la base locale du portail : elle échange alors les données par <b>fichier .xlsx</b> (import de la liste, export des saisies), ce que le cahier des charges impose toujours.</p></div>
+ <div class="card"><h2>🧑‍💻 Voie avancée : Claude Code</h2>
+  <p>Si vous utilisez Claude Code relié à votre compte GitHub, choisissez cette voie à l'étape 3 : Claude crée lui-même le dépôt, y écrit les fichiers et active GitHub Pages. Les étapes 4 et 5 de la Fabrique servent alors à vérifier le résultat.</p></div>
+</section>
+</main>
+<div id="toast" role="status" aria-live="polite"></div>
+<div id="qrm" class="ov" hidden><div class="fc qc"><button id="qx" aria-label="Fermer" class="xb">✕</button><h2 style="margin:0 0 8px">▦ Votre appli</h2><div id="qrc" class="qrbox"></div><p id="qru" class="qru"></p></div></div>
+<p class="ver">Fabrique EPS · version <span id="ver"></span> · aucune donnée d'élève n'est traitée ni publiée</p>
+<nav><button class="act" data-t="tP">📁 Projets</button><button data-t="tA">🛠️ Atelier</button><button data-t="tG">📘 Guide</button></nav>
+<script src="version.js"></script>
+<script src="eps-core.js"></script>
+<script src="qrcode.js"></script>
+<script src="zip.js"></script>
+<script src="github.js"></script>
+<script src="catalogue.js"></script>
+<script src="prompt.js"></script>
+<script src="app.js"></script>
+</body></html>
