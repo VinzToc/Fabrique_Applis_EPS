@@ -1,5 +1,5 @@
 importScripts('version.js');
-const V='fabrikapplis-eps-v'+APP_VERSION,F=['nouveautes.js','nouveautes.json','./','index.html','style.css','version.js','eps-core.js','eleve-core.js','qrcode.js','zip.js','github.js','catalogue.js','prompt.js','app.js','manifest.webmanifest','icons/icon-192.png','icons/icon-512.png'];
+const V='fabrikapplis-eps-v'+APP_VERSION,F=['footer.js','nouveautes.js','nouveautes.json','./','index.html','style.css','version.js','eps-core.js','eleve-core.js','qrcode.js','zip.js','github.js','catalogue.js','prompt.js','app.js','manifest.webmanifest','icons/icon-192.png','icons/icon-512.png'];
 const T=2500;
 const net=r=>new Promise((ok,ko)=>{const t=setTimeout(()=>ko(new Error('timeout')),T);fetch(r,{cache:'no-cache'}).then(x=>{clearTimeout(t);ok(x)},e=>{clearTimeout(t);ko(e)})});
 self.addEventListener('install',e=>{e.waitUntil(caches.open(V).then(c=>Promise.all(F.map(u=>fetch(u,{cache:'reload'}).then(r=>r.ok&&c.put(u,r)).catch(()=>{})))));self.skipWaiting()});
